@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-const API_URL = "https://cw1idz62fc.onrender.com";
+
 function App() {
   // ==========================================
   // ส่วนที่ 1: การสร้าง State (ตัวแปรสำหรับเก็บข้อมูลของหน้าเว็บ)
@@ -23,11 +23,11 @@ function App() {
   const fetchAllData = async () => {
     try {
       // ไปขอข้อมูลที่จับคู่แล้ว
-      const resMatch = await fetch('https://cw1idz62fc.onrender.com/api/matchings');
+      const resMatch = await fetch('http://localhost:3000/api/matchings');
       setMatchings(await resMatch.json());
 
       // ไปขอข้อมูลคิวที่ยังเหลืออยู่
-      const resActive = await fetch('https://cw1idz62fc.onrender.com/api/active-orders');
+      const resActive = await fetch('http://localhost:3000/api/active-orders');
       setActiveOrders(await resActive.json());
     } catch (error) {
       console.error("ดึงข้อมูลไม่ได้:", error);
@@ -58,7 +58,7 @@ function App() {
     
     try {
       // ส่งข้อมูลจากฟอร์มทั้งหมดไปให้ Backend บันทึก
-      const res = await fetch('https://cw1idz62fc.onrender.com/api/orders', {
+      const res = await fetch('http://localhost:3000/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -83,7 +83,7 @@ function App() {
   // 3.4 ฟังก์ชันเมื่อกดปุ่มรูปแว่นขยาย 🔍 เพื่อดึงข้อมูลการติดต่อมาโชว์ใน Popup
   const fetchUserDetails = async (userId) => {
     try {
-      const res = await fetch(`https://cw1idz62fc.onrender.com/api/users/${userId}`);
+      const res = await fetch(`http://localhost:3000/api/users/${userId}`);
       if (res.ok) {
         setSelectedUser(await res.json()); // เก็บข้อมูลที่ได้ลง State เพื่อเปิด Popup
       } else {
@@ -98,7 +98,7 @@ function App() {
   const handleResetSystem = async () => {
     if (window.confirm("🚨 คุณต้องการล้างประวัติคำสั่งซื้อขายทั้งหมดเพื่อเริ่มทดสอบใหม่ ใช่หรือไม่?")) {
       try {
-        const res = await fetch('https://cw1idz62fc.onrender.com/api/reset', { method: 'DELETE' });
+        const res = await fetch('http://localhost:3000/api/reset', { method: 'DELETE' });
         if (res.ok) {
           await fetchAllData(); // ดึงข้อมูลใหม่ (ซึ่งตารางจะกลายเป็นว่างเปล่า)
           alert("ทำความสะอาดระบบเรียบร้อย พร้อมสำหรับการทดสอบรอบใหม่!");
