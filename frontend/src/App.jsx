@@ -1,64 +1,34 @@
 import { useState, useEffect } from 'react';
 
+// สร้างตัวแปรเก็บ URL ของ Backend
+// เวลาทดสอบในเครื่อง ใช้ 'http://localhost:3000/api'
+// เวลาเอาขึ้น Vercel ให้เปลี่ยนเป็นลิงก์ Backend จริงของคุณ
+const API_BASE_URL = 'https://test-vvla.onrender.com/api'; 
+// (ถ้ายังไม่มีลิงก์จริง ต้องไปทำขั้นตอนที่ 1 ก่อนครับ)
+
 function App() {
-  // ==========================================
-  // ส่วนที่ 1: การสร้าง State (ตัวแปรสำหรับเก็บข้อมูลของหน้าเว็บ)
-  // ==========================================
-  
-  // 1.1 formData: เก็บข้อมูลทั้งหมดที่ผู้ใช้พิมพ์เข้ามาในฟอร์ม
-  const [formData, setFormData] = useState({
-    name: '', email: '', phone: '', product_id: 101, order_type_id: 1, price: '', volume: ''
-  });
+  // ... (ส่วน State คงเดิม) ...
 
-  // 1.2 State สำหรับเก็บข้อมูลจาก Database มาแสดงในตาราง
-  const [matchings, setMatchings] = useState([]);       // เก็บประวัติที่จับคู่สำเร็จ (ตารางที่ 2)
-  const [activeOrders, setActiveOrders] = useState([]); // เก็บออเดอร์ที่ยังรอคิวอยู่ (ตารางที่ 3)
-  const [selectedUser, setSelectedUser] = useState(null); // เก็บข้อมูลคนที่จะเอามาโชว์ในหน้าต่าง Popup
-
-  // ==========================================
-  // ส่วนที่ 2: ฟังก์ชันดึงข้อมูลจากหลังบ้าน (Backend)
-  // ==========================================
-  
-  // 2.1 ฟังก์ชันดึงข้อมูลประวัติและสถานะคิวทั้งหมด
   const fetchAllData = async () => {
     try {
-      // ไปขอข้อมูลที่จับคู่แล้ว
-      const resMatch = await fetch('http://localhost:3000/api/matchings');
+      // เปลี่ยนมาใช้ API_BASE_URL แทน localhost
+      const resMatch = await fetch(`${API_BASE_URL}/matchings`);
       setMatchings(await resMatch.json());
 
-      // ไปขอข้อมูลคิวที่ยังเหลืออยู่
-      const resActive = await fetch('http://localhost:3000/api/active-orders');
+      const resActive = await fetch(`${API_BASE_URL}/active-orders`);
       setActiveOrders(await resActive.json());
     } catch (error) {
       console.error("ดึงข้อมูลไม่ได้:", error);
     }
   };
 
-  // 2.2 useEffect: สั่งให้ฟังก์ชัน fetchAllData ทำงาน "ทันที" ที่เปิดหน้าเว็บขึ้นมาครั้งแรก
-  useEffect(() => {
-    fetchAllData();
-  }, []);
-
-  // ==========================================
-  // ส่วนที่ 3: ฟังก์ชันจัดการการกระทำของผู้ใช้ (Events)
-  // ==========================================
-
-  // 3.1 ฟังก์ชันอัปเดตข้อมูลเมื่อผู้ใช้พิมพ์ข้อความลงในช่องฟอร์ม
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // 3.2 ฟังก์ชันสุ่มตัวเลข 3 หลัก สำหรับทำเป็น User ID ให้ลูกค้า
-  const generateRandomUserId = () => Math.floor(100 + Math.random() * 900);
-
-  // 3.3 ฟังก์ชันหลัก: เมื่อผู้ใช้กดปุ่ม "ยืนยันส่งคำสั่ง"
   const handleSubmit = async (e) => {
-    e.preventDefault(); // ป้องกันไม่ให้หน้าเว็บรีเฟรชเองตอนกดปุ่ม
-    const newUserId = generateRandomUserId(); // สร้าง ID ใหม่
+    e.preventDefault();
+    const newUserId = generateRandomUserId();
     
     try {
-      // ส่งข้อมูลจากฟอร์มทั้งหมดไปให้ Backend บันทึก
-      const res = await fetch('http://localhost:3000/api/orders', {
+      // เปลี่ยนมาใช้ API_BASE_URL
+      const res = await fetch(`${API_BASE_URL}/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -70,9 +40,8 @@ function App() {
       });
 
       if (res.ok) {
-        // ถ้าส่งสำเร็จ ให้ล้างข้อมูลแค่ช่อง ราคา กับ ปริมาณ (เผื่อคนเดิมอยากสั่งอย่างอื่นต่อ)
         setFormData({ ...formData, price: '', volume: '' }); 
-        await fetchAllData(); // สั่งให้ตารางอัปเดตข้อมูลใหม่ทันที
+        await fetchAllData();
         alert(`ส่งคำสั่งสำเร็จ! รหัสผู้ใช้คือ: ${newUserId}`);
       }
     } catch (error) {
@@ -80,12 +49,12 @@ function App() {
     }
   };
 
-  // 3.4 ฟังก์ชันเมื่อกดปุ่มรูปแว่นขยาย 🔍 เพื่อดึงข้อมูลการติดต่อมาโชว์ใน Popup
   const fetchUserDetails = async (userId) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/users/${userId}`);
+      // เปลี่ยนมาใช้ API_BASE_URL
+      const res = await fetch(`${API_BASE_URL}/users/${userId}`);
       if (res.ok) {
-        setSelectedUser(await res.json()); // เก็บข้อมูลที่ได้ลง State เพื่อเปิด Popup
+        setSelectedUser(await res.json());
       } else {
         alert("ไม่พบข้อมูลผู้ใช้งาน");
       }
@@ -94,13 +63,13 @@ function App() {
     }
   };
 
-  // 3.5 ฟังก์ชันสำหรับกดปุ่ม "เริ่มเทสต์ระบบใหม่ (Reset)"
   const handleResetSystem = async () => {
     if (window.confirm("🚨 คุณต้องการล้างประวัติคำสั่งซื้อขายทั้งหมดเพื่อเริ่มทดสอบใหม่ ใช่หรือไม่?")) {
       try {
-        const res = await fetch('http://localhost:3000/api/reset', { method: 'DELETE' });
+        // เปลี่ยนมาใช้ API_BASE_URL
+        const res = await fetch(`${API_BASE_URL}/reset`, { method: 'DELETE' });
         if (res.ok) {
-          await fetchAllData(); // ดึงข้อมูลใหม่ (ซึ่งตารางจะกลายเป็นว่างเปล่า)
+          await fetchAllData();
           alert("ทำความสะอาดระบบเรียบร้อย พร้อมสำหรับการทดสอบรอบใหม่!");
         }
       } catch (error) {
@@ -108,6 +77,8 @@ function App() {
       }
     }
   };
+
+  // ... (ส่วน Helpers และ HTML/JSX คงเดิมทั้งหมด) ...
 
   // ==========================================
   // ส่วนที่ 4: ฟังก์ชันช่วยเหลือ (Helpers)
