@@ -146,7 +146,7 @@ function App() {
 
           <div style={{ gridColumn: '1 / -1', borderBottom: '1px solid #eee', paddingBottom: '10px', marginTop: '10px' }}><strong>รายละเอียดสินค้า</strong></div>
           <div>
-            <label>ประเภทคำสั่ง: </label><br/>
+            <label>Buy (ซื้อ) / Sell (ขาย): </label><br/>
             <select name="order_type_id" value={formData.order_type_id} onChange={handleChange} style={{ width: '100%', padding: '5px' }}>
               <option value={1}>Buy (ซื้อ)</option><option value={2}>Sell (ขาย)</option>
             </select>
@@ -160,7 +160,7 @@ function App() {
           </div>
           <div><label>ราคาเสนอ ($): </label><br/><input type="number" step="0.01" name="price" value={formData.price} onChange={handleChange} required style={{ width: '100%', padding: '5px' }} /></div>
           <div><label>ปริมาณ (kg): </label><br/><input type="number" name="volume" value={formData.volume} onChange={handleChange} required style={{ width: '100%', padding: '5px' }} /></div>
-          <button type="submit" style={{ gridColumn: '1 / -1', padding: '12px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }}>ยืนยันส่งคำสั่ง</button>
+          <button type="submit" style={{ gridColumn: '1 / -1', padding: '12px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }}>ยืนยันข้อมูล</button>
         </form>
       </div>
 
