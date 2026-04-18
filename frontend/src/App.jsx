@@ -98,7 +98,7 @@ function App() {
   const handleResetSystem = async () => {
     if (window.confirm("🚨 คุณต้องการล้างประวัติคำสั่งซื้อขายทั้งหมดเพื่อเริ่มทดสอบใหม่ ใช่หรือไม่?")) {
       try {
-        const res = await fetch('http://localhost:3000/api/reset', { method: 'DELETE' });
+        const res = await fetch('https://cw1idz62fc.onrender.com/api/reset', { method: 'DELETE' });
         if (res.ok) {
           await fetchAllData(); // ดึงข้อมูลใหม่ (ซึ่งตารางจะกลายเป็นว่างเปล่า)
           alert("ทำความสะอาดระบบเรียบร้อย พร้อมสำหรับการทดสอบรอบใหม่!");
