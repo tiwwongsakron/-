@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 // สร้างตัวแปรเก็บ URL ของ Backend
 // เวลาทดสอบในเครื่อง ใช้ 'http://localhost:3000/api'
 // เวลาเอาขึ้น Vercel ให้เปลี่ยนเป็นลิงก์ Backend จริงของคุณ
-const API_BASE_URL = 'https://test-vvla.onrender.com/api'; 
+const API_BASE_URL = 'https://test2-q0wt.onrender.com/api'; 
 // (ถ้ายังไม่มีลิงก์จริง ต้องไปทำขั้นตอนที่ 1 ก่อนครับ)
 
 function App() {
