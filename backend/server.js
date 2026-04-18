@@ -174,7 +174,9 @@ app.delete('/api/reset', (req, res) => {
 // ==========================================
 // ส่วนสั่งเปิดเซิร์ฟเวอร์
 // ==========================================
-const PORT = 3000;
+// ให้เซิร์ฟเวอร์ดึง Port จากระบบจริงมาก่อน ถ้าไม่มีค่อยใช้ 3000 (สำหรับรันทดสอบในเครื่อง)
+const PORT = process.env.PORT || 3000; 
+
 app.listen(PORT, () => {
-    console.log(`🚀 เซิร์ฟเวอร์ Backend รันพร้อมระบบ Matching Algorithm ที่ http://localhost:${PORT}`);
+    console.log(`🚀 เซิร์ฟเวอร์ Backend รันพร้อมระบบ Matching Algorithm ที่ Port ${PORT}`);
 });
