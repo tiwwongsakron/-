@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+const API_URL = "https://cw1idz62fc.onrender.com";
 function App() {
   // ==========================================
   // ส่วนที่ 1: การสร้าง State (ตัวแปรสำหรับเก็บข้อมูลของหน้าเว็บ)
